@@ -1,10 +1,8 @@
 <?php
 // Include settings.php
-require_once(dirname(dirname(dirname(__DIR__))) . '/settings.php');
+require_once(__DIR__ . '/../../../settings.php');
 //require_once(dirname(dirname(__DIR__)) . '/components/bot/olbot.php');
 require_once(CREST_PATH . '/crest.php');
-
-
 
 // Function to log sensitive information
 function logSensitiveInfo($message) {

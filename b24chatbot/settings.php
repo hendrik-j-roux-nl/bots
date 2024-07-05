@@ -26,14 +26,13 @@ if (!defined('STYLES_PATH')) {
     define('STYLES_PATH', BASE_PATH . '/styles');
 }
 
+
 /* ----------[Application Identity]--------------------------------------------------------- */
 // Define the application ID
 define('C_REST_CLIENT_ID', 'YOUR_CLIENT_ID_HERE');
 
 // Define the application key
 define('C_REST_CLIENT_SECRET', 'YOUR_CLIENT_SECRET_HERE');
-
-
 
 // Uncomment the line below and define the URL of the web hook if using web hooks
 // define('C_REST_WEB_HOOK_URL', 'https://rest-api.bitrix24.com/rest/1/doutwqkjxgc3mgc1/');

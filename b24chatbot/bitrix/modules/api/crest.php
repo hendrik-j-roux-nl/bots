@@ -1,6 +1,6 @@
 <?php
 // Include settings.php
-require_once(dirname(dirname(dirname(__DIR__))) . '/settings.php');
+require_once(__DIR__ . '/../../../settings.php');
 
 /**
  *  @version 1.36

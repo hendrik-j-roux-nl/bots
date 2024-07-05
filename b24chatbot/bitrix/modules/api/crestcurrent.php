@@ -1,6 +1,5 @@
 <?php
-// Include settings.php
-require_once(dirname(dirname(dirname(__DIR__))) . '/settings.php');
+require_once(__DIR__ . '/../../../settings.php');
 require_once(CREST_PATH . '/crest.php');
 
 class CRestCurrent extends CRest

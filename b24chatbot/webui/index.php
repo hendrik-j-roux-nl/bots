@@ -1,7 +1,9 @@
 <?php
 // Include settings.
 // Using dirname(__DIR__) to include settings.php ensures no constant dependency, defined within settings.php.
-require_once(dirname(__DIR__) . '/settings.php');
+require_once(__DIR__ . '/../settings.php');
+
+// Rest of the code remains the same
 require_once(CREST_PATH . '/crest.php');
 
 // Function to log sensitive information
