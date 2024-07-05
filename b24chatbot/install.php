@@ -21,7 +21,7 @@ try {
     logSensitiveInfo("CRest methods: " . print_r(get_class_methods('CRest'), true));
 
     // Use the installApp method from CRest class
-    $installResult = CRest::installApp();
+   // $installResult = CRest::installApp();
 
     logSensitiveInfo("Install result: " . print_r($installResult, true));
 /*
