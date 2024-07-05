@@ -3,6 +3,7 @@
 require_once(dirname(dirname(dirname(__DIR__))) . '/settings.php');
 require_once(CREST_PATH . '/crest.php');
 require_once(BOTS_PATH . '/bot.php');
+/*
 
 // Function to log sensitive information
 function logSensitiveInfo($message) {
@@ -62,3 +63,6 @@ switch ($event['event']) {
 
 // Encode the result array as JSON and output it
 echo json_encode($result);
+*/
+
+echo 'Blah-blah';
