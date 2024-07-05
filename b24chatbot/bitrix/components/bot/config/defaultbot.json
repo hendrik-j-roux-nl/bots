@@ -1,0 +1,15 @@
+{
+    "CODE": "open_channel_bot",
+    "TYPE": "O",
+    "EVENT_MESSAGE_ADD": "https://yourserver.com/handler.php?action=messageAdd",
+    "EVENT_WELCOME_MESSAGE": "https://yourserver.com/handler.php?action=welcomeMessage",
+    "EVENT_BOT_DELETE": "https://yourserver.com/handler.php?action=deleteBot",
+    "PROPERTIES": {
+        "NAME": "Open Channel Bot",
+        "COLOR": "AQUA",
+        "EMAIL": "bot@example.com",
+        "PERSONAL_BIRTHDAY": "2023-01-01",
+        "WORK_POSITION": "Open Channel Bot"
+    },
+    "OPEN_CHANNEL_CODE": "your_open_channel_code"
+}

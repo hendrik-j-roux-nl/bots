@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNi4 Online Bitrix24 AI Bot Architecture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="text/babel">
+        const Architecture = () => {
+            const [activeSection, setActiveSection] = React.useState(null);
+
+            const sections = [
+                { id: 'summary', title: 'Project Summary' },
+                { id: 'bitrix24', title: 'Bitrix24 Local Application' },
+                { id: 'chatbots', title: 'Chatbots and GPT Agents' },
+                { id: 'flowise', title: 'Flowise and Agency Swarm' },
+                { id: 'autogroq', title: 'AutoGroq and Pinecone Integration' }
+            ];
+
+            const content = {
+                summary: 'The UNi4 Online Bitrix24 AI Bot Architecture is a comprehensive ecosystem designed to integrate advanced AI capabilities into the Bitrix24 platform. It leverages various technologies including AutoGroq, Agency Swarm, Flowise, and Pinecone to create a powerful, flexible, and efficient chatbot system capable of handling both internal and external business processes.',
+                bitrix24: 'The Bitrix24 Local Application serves as the bridge between the Bitrix24 platform and our custom AI ecosystem. It handles OAuth 2.0 authentication, manages webhooks for real-time updates, and provides an administration interface for configuring the AI bot. This application needs to be registered in the Bitrix24 marketplace and implement the necessary API calls to interact with Bitrix24 services.',
+                chatbots: 'Chatbots are integrated into Bitrix24\'s Open Channel, allowing them to interact with both internal and external users. GPT agents are arrayed to handle specific business functions, such as Finance, HR, Academic Services, and Customer Care. These agents can access relevant data and knowledge bases to provide accurate and context-aware responses.',
+                flowise: 'Flowise is used to design and manage the conversation flows for the chatbots. It provides a visual interface for creating complex dialogue trees and decision points. The Agency Swarm framework orchestrates the GPT agents, managing their lifecycles and coordinating their activities to ensure cohesive and efficient operation across various business domains.',
+                autogroq: 'AutoGroq acts as the project management console for GPT agents, while Flowise handles the orchestration of chatbot flows. When a request comes in, AutoGroq determines which GPT agent should handle it based on the context and intent. It then uses Flowise to manage the conversation flow. To access relevant data, the system queries the Pinecone vector database, which stores and retrieves information efficiently using vector embeddings.'
+            };
+
+            return (
+                <div className="container mx-auto px-4 py-8">
+                    <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">UNi4 Online Bitrix24 AI Bot Architecture</h1>
+                    
+                    <div className="mb-8">
+                        <h2 className="text-2xl font-semibold mb-4">Comprehensive Business Ecosystem Architecture</h2>
+                        <img src="/api/placeholder/800/600" alt="Architecture Diagram" className="w-full h-auto rounded-lg shadow-lg" />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        {sections.map(section => (
+                            <button
+                                key={section.id}
+                                className={`p-2 rounded ${activeSection === section.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} hover:bg-blue-400 hover:text-white transition-colors`}
+                                onClick={() => setActiveSection(section.id)}
+                            >
+                                {section.title}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {activeSection && (
+                        <div className="bg-white p-6 rounded-lg shadow-md fade-in">
+                            <h3 className="text-xl font-semibold mb-4">{sections.find(s => s.id === activeSection).title}</h3>
+                            <p>{content[activeSection]}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<Architecture />, document.getElementById('root'));
+    </script>
+</body>
+</html>
