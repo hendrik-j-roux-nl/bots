@@ -17,8 +17,13 @@ function validateAndSanitizeInput($input) {
 try {
     logSensitiveInfo("Received parameters: " . print_r($_REQUEST, true));
 
+    // Debug: Log the CRest class methods
+    logSensitiveInfo("CRest methods: " . print_r(get_class_methods('CRest'), true));
+
     // Use the installApp method from CRest class
     $installResult = CRest::installApp();
+
+    logSensitiveInfo("Install result: " . print_r($installResult, true));
 
     if ($installResult['install']) {
         logSensitiveInfo("Application installed successfully");
@@ -38,6 +43,8 @@ try {
             'PROPERTIES' => $defaultBotSettings['PROPERTIES']
         ]);
 
+        logSensitiveInfo("Bot register result: " . print_r($botRegisterResult, true));
+
         if (isset($botRegisterResult['error'])) {
             throw new Exception("Bot registration failed: {$botRegisterResult['error']}: {$botRegisterResult['error_description']}");
         }
@@ -45,6 +52,8 @@ try {
         $openChannelResult = CRest::call('imopenlines.network.join', [
             'CODE' => $defaultBotSettings['OPEN_CHANNEL_CODE']
         ]);
+
+        logSensitiveInfo("Open channel result: " . print_r($openChannelResult, true));
 
         if (isset($openChannelResult['error'])) {
             throw new Exception("Open Channel joining failed: {$openChannelResult['error']}: {$openChannelResult['error_description']}");
@@ -70,4 +79,4 @@ try {
 }
 
 // Render the view
-require_once(BASE_PATH . '/webui/installation_result.php');
+require_once(BASE_PATH . '/views/installation_result.php');
