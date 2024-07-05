@@ -34,11 +34,22 @@ try {
 
     $settings['client_endpoint'] = 'https://' . $settings['DOMAIN'] . '/rest/';
 
-    if (!CRest::setAppSettings($settings)) {
-        throw new Exception("Failed to save application settings");
+    // Instead of calling setAppSettings directly, use the installApp method
+    $installResult = CRest::installApp([
+        'access_token' => $settings['AUTH_ID'],
+        'expires_in' => $settings['AUTH_EXPIRES'],
+        'application_token' => $settings['APP_SID'],
+        'refresh_token' => $settings['REFRESH_ID'],
+        'domain' => $settings['DOMAIN'],
+        'client_endpoint' => $settings['client_endpoint'],
+        'member_id' => $settings['member_id'],
+    ]);
+
+    if (!$installResult['install']) {
+        throw new Exception("Installation failed: " . json_encode($installResult));
     }
 
-    logSensitiveInfo("Successfully saved application settings");
+    logSensitiveInfo("Successfully installed application");
 
     $installResult = CRest::installApp();
     if (!$installResult['install']) {
@@ -89,4 +100,4 @@ try {
 }
 
 // Render the view
-require_once(BASE_PATH . '/views/installation_result.php');
+require_once(BASE_PATH . '/webui/installation_result.php');
