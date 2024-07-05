@@ -10,12 +10,6 @@ function logSensitiveInfo($message) {
     error_log($logMessage);
 }
 
-function handleInstallationError($errorMessage, $errorDetails = null) {
-    logSensitiveInfo("Installation Error: $errorMessage");
-    handleError(500, $errorMessage, $errorDetails);
-}
-
-/* ------ [OAuth setAPpSettings]--------------------------------------------------------- */
 function validateAndSanitizeInput($input) {
     return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
@@ -23,66 +17,56 @@ function validateAndSanitizeInput($input) {
 try {
     logSensitiveInfo("Received parameters: " . print_r($_REQUEST, true));
 
-    $requiredParams = ['DOMAIN', 'AUTH_ID', 'REFRESH_ID', 'APP_SID', 'AUTH_EXPIRES', 'member_id'];
-    $settings = [];
-
-    foreach ($requiredParams as $param) {
-        if (!isset($_REQUEST[$param])) {
-            throw new Exception("Missing required parameter: $param");
-        }
-        $settings[$param] = validateAndSanitizeInput($_REQUEST[$param]);
-    }
-
+    // Use the installApp method from CRest class
     $installResult = CRest::installApp();
 
     if ($installResult['install']) {
         logSensitiveInfo("Application installed successfully");
 
-/* ------- [Default Bot Registration] -------------------------------------------------------*/
+        // Proceed with bot registration
+        $defaultBotSettings = json_decode(file_get_contents(CONFIG_PATH.'/config/defaultbot.json'), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception("Failed to parse defaultbot.json");
+        }
 
-$defaultBotSettings = json_decode(file_get_contents(CONFIG_PATH.'/config/defaultbot.json'), true);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    throw new Exception("Failed to parse defaultbot.json");
-}
+        $botRegisterResult = CRest::call('imbot.register', [
+            'CODE' => $defaultBotSettings['CODE'],
+            'TYPE' => $defaultBotSettings['TYPE'],
+            'EVENT_MESSAGE_ADD' => $defaultBotSettings['EVENT_MESSAGE_ADD'],
+            'EVENT_WELCOME_MESSAGE' => $defaultBotSettings['EVENT_WELCOME_MESSAGE'],
+            'EVENT_BOT_DELETE' => $defaultBotSettings['EVENT_BOT_DELETE'],
+            'PROPERTIES' => $defaultBotSettings['PROPERTIES']
+        ]);
 
-$botRegisterResult = CRest::call('imbot.register', [
-    'CODE' => $defaultBotSettings['CODE'],
-    'TYPE' => $defaultBotSettings['TYPE'],
-    'EVENT_MESSAGE_ADD' => $defaultBotSettings['EVENT_MESSAGE_ADD'],
-    'EVENT_WELCOME_MESSAGE' => $defaultBotSettings['EVENT_WELCOME_MESSAGE'],
-    'EVENT_BOT_DELETE' => $defaultBotSettings['EVENT_BOT_DELETE'],
-    'PROPERTIES' => $defaultBotSettings['PROPERTIES']
-]);
+        if (isset($botRegisterResult['error'])) {
+            throw new Exception("Bot registration failed: {$botRegisterResult['error']}: {$botRegisterResult['error_description']}");
+        }
 
-if (isset($botRegisterResult['error'])) {
-    throw new Exception("Bot registration failed: {$botRegisterResult['error']}: {$botRegisterResult['error_description']}");
-}
+        $openChannelResult = CRest::call('imopenlines.network.join', [
+            'CODE' => $defaultBotSettings['OPEN_CHANNEL_CODE']
+        ]);
 
-$openChannelResult = CRest::call('imopenlines.network.join', [
-    'CODE' => $defaultBotSettings['OPEN_CHANNEL_CODE']
-]);
+        if (isset($openChannelResult['error'])) {
+            throw new Exception("Open Channel joining failed: {$openChannelResult['error']}: {$openChannelResult['error_description']}");
+        }
 
-if (isset($openChannelResult['error'])) {
-    throw new Exception("Open Channel joining failed: {$openChannelResult['error']}: {$openChannelResult['error_description']}");
-}
+        $botId = $botRegisterResult['result'];
+        logSensitiveInfo("Installation successful. Bot ID: $botId");
 
-$botId = $botRegisterResult['result'];
-logSensitiveInfo("Installation successful. Bot ID: $botId");
-
-$viewData = [
-    'installSuccess' => true,
-    'botId' => $botId
-];
-} else {
-throw new Exception("Installation failed: " . json_encode($installResult));
-}
+        $viewData = [
+            'installSuccess' => true,
+            'botId' => $botId
+        ];
+    } else {
+        throw new Exception("Installation failed: " . json_encode($installResult));
+    }
 
 } catch (Exception $e) {
-logSensitiveInfo("Installation Error: " . $e->getMessage());
-$viewData = [
-'installSuccess' => false,
-'errorMessage' => $e->getMessage()
-];
+    logSensitiveInfo("Installation Error: " . $e->getMessage());
+    $viewData = [
+        'installSuccess' => false,
+        'errorMessage' => $e->getMessage()
+    ];
 }
 
 // Render the view
