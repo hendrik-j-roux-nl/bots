@@ -24,7 +24,7 @@ try {
     $installResult = CRest::installApp();
 
     logSensitiveInfo("Install result: " . print_r($installResult, true));
-
+/*
     if ($installResult['install']) {
         logSensitiveInfo("Application installed successfully");
 
@@ -69,7 +69,7 @@ try {
     } else {
         throw new Exception("Installation failed: " . json_encode($installResult));
     }
-
+*/
 } catch (Exception $e) {
     logSensitiveInfo("Installation Error: " . $e->getMessage());
     $viewData = [
@@ -79,4 +79,4 @@ try {
 }
 
 // Render the view
-require_once(BASE_PATH . '/views/installation_result.php');
+require_once(BASE_PATH . '/webui/installation_result.php');
