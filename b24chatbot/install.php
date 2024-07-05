@@ -4,16 +4,61 @@ require_once(__DIR__ . '/settings.php');
 require_once(BASE_PATH . '/error_handler.php');
 require_once(CREST_PATH . '/crest.php');
 
+
+// Basic logging
+function setLog($arData, $type = '')
+{
+    $return = false;
+    if(!defined("C_REST_BLOCK_LOG") || C_REST_BLOCK_LOG !== true)
+    {
+        if(defined("C_REST_LOGS_DIR"))
+        {
+            $path = C_REST_LOGS_DIR;
+        }
+        else
+        {
+            $path = __DIR__ . '/logs/';
+        }
+        $path .= date("Y-m-d/H") . '/';
+
+        if (!file_exists($path))
+        {
+            @mkdir($path, 0775, true);
+        }
+
+        $path .= time() . '_' . $type . '_' . rand(1, 9999999) . 'log';
+        if(!defined("C_REST_LOG_TYPE_DUMP") || C_REST_LOG_TYPE_DUMP !== true)
+        {
+            $jsonLog = static::wrapData($arData);
+            if ($jsonLog === false)
+            {
+                $return = file_put_contents($path . '_backup.txt', var_export($arData, true));
+            }
+            else
+            {
+                $return = file_put_contents($path . '.json', $jsonLog);
+            }
+        }
+        else
+        {
+            $return = file_put_contents($path . '.txt', var_export($arData, true));
+        }
+    }
+    return $return;
+}
+
+/*
 function logSensitiveInfo($message) {
     $timestamp = date('Y-m-d H:i:s');
     $logMessage = "[$timestamp] $message";
     error_log($logMessage);
 }
-
+*/
 function validateAndSanitizeInput($input) {
     return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
-
+setLog("Received parameters: " . print_r($_REQUEST, true));
+/*
 try {
     logSensitiveInfo("Received parameters: " . print_r($_REQUEST, true));
 
@@ -24,7 +69,7 @@ try {
    // $installResult = CRest::installApp();
 
     logSensitiveInfo("Install result: " . print_r($installResult, true));
-/*
+
     if ($installResult['install']) {
         logSensitiveInfo("Application installed successfully");
 
@@ -69,7 +114,7 @@ try {
     } else {
         throw new Exception("Installation failed: " . json_encode($installResult));
     }
-*/
+
 } catch (Exception $e) {
     logSensitiveInfo("Installation Error: " . $e->getMessage());
     $viewData = [
@@ -77,6 +122,6 @@ try {
         'errorMessage' => $e->getMessage()
     ];
 }
-
+*/
 // Render the view
 require_once(BASE_PATH . '/webui/installation_result.php');
