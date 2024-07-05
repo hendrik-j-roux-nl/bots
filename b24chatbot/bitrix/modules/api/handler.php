@@ -1,9 +1,10 @@
 <?php
 // Include settings.php
 require_once(dirname(dirname(dirname(__DIR__))) . '/settings.php');
+//require_once(dirname(dirname(__DIR__)) . '/components/bot/olbot.php');
 require_once(CREST_PATH . '/crest.php');
-require_once(BOTS_PATH . '/bot.php');
-/*
+
+
 
 // Function to log sensitive information
 function logSensitiveInfo($message) {
@@ -13,7 +14,7 @@ function logSensitiveInfo($message) {
     file_put_contents($logFile, $logMessage, FILE_APPEND);
 }
 
-OLBot::init();
+/*OLBot::init();
 
 // Handle only POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -65,4 +66,4 @@ switch ($event['event']) {
 echo json_encode($result);
 */
 
-echo 'Blah-blah';
+echo 'Blah-blah from the handler.';
