@@ -22,15 +22,21 @@ try {
     logSensitiveInfo("CRest methods: " . print_r(get_class_methods('CRest'), true));
 
     // Use the installApp method from CRest class
-   /*$installResult = CRest::installApp();
+    $installResult = CRest::installApp();
 
     logSensitiveInfo("Install result: " . print_r($installResult, true));
 
+    /* --------------- [Default Bot Installation]---------------------------------------------------------------------------
+    Check the application installation to be successful.  Install the default bot so that the Bitrix24 application
+    can display the admin screen to the installer.
+
+    On successfull installation the C_REST_CLIENT_ID and C_REST_CLIENT_SECRET are saved to the settings.php file.
+    ---------------------------------------------------------------------------------------------------------------------- */
     if ($installResult['install']) {
         logSensitiveInfo("Application installed successfully");
 
-        // Proceed with bot registration
-        $defaultBotSettings = json_decode(file_get_contents(CONFIG_PATH.'/config/defaultbot.json'), true);
+        // Proceed with default bot registration
+        $defaultBotSettings = json_decode(file_get_contents(BOTCON_PATH.'/defaultbot.json'), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new Exception("Failed to parse defaultbot.json");
         }
@@ -70,7 +76,6 @@ try {
     } else {
         throw new Exception("Installation failed: " . json_encode($installResult));
     }
-*/
 } catch (Exception $e) {
     logSensitiveInfo("Installation Error: " . $e->getMessage());
     $viewData = [
@@ -78,5 +83,6 @@ try {
         'errorMessage' => $e->getMessage()
     ];
 }
+
 // Render the view
 require_once(BASE_PATH . '/webui/installation_result.php');

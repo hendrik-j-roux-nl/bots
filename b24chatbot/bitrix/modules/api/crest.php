@@ -393,7 +393,7 @@ class CRest
 			$isCurrData = true;
 		} else {
 			// Retrieve the settings data using the getSettingData() function
-			$arData = static::getSettingData();
+			$arData = static::();
 			$isCurrData = false;
 			// Check if the retrieved data contains the necessary fields
 			if (
